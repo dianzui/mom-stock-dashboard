@@ -1,0 +1,43 @@
+name: 每日更新股票看板
+
+on:
+  schedule:
+    # 北京时间 15:50 = UTC 07:50（周一到周五，收盘后）
+    - cron: '50 7 * * 1-5'
+  workflow_dispatch:      # 也可以手动点一下触发
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 采集行情与资金流
+        run: |
+          python build.py
+          python gather_watch.py
+
+      - name: 生成看板
+        run: |
+          python render.py
+          cp dashboard.html index.html
+
+      - name: 提交并发布
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if git diff --staged --quiet; then
+            echo "内容无变化，跳过提交"
+          else
+            git commit -m "自动更新 $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M')"
+            git push
+          fi

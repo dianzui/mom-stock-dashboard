@@ -1,0 +1,7 @@
+data/
+*.png
+__pycache__/
+.DS_Store
+*.pyc
+gh.zip
+*.command
