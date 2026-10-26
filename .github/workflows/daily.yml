@@ -9,6 +9,9 @@ on:
 permissions:
   contents: write
 
+env:
+  TZ: Asia/Shanghai       # 让脚本里的时间显示为北京时间
+
 jobs:
   build:
     runs-on: ubuntu-latest
