@@ -2,8 +2,9 @@ name: 每日更新股票看板
 
 on:
   schedule:
-    # 北京时间 15:50 = UTC 07:50（周一到周五，收盘后）
-    - cron: '50 7 * * 1-5'
+    # 兜底：北京时间 20:00 = UTC 12:00（周一到周五）
+    # 主力由本机 launchd 每天 16:30 跑，这里只是 Mac 没开机时的后备
+    - cron: '0 12 * * 1-5'
   workflow_dispatch:      # 也可以手动点一下触发
 
 permissions:
