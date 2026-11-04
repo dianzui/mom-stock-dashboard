@@ -26,6 +26,7 @@ echo "[$(date '+%F %T')] ===== 开始 =====" >> "$LOG"
 /usr/bin/python3 render.py       >> "$LOG" 2>&1 || { echo "[$(date '+%F %T')] render 失败" >> "$LOG"; exit 1; }
 
 cp dashboard.html index.html
+git pull -q --rebase --autostash origin main >> "$LOG" 2>&1
 git add index.html >> "$LOG" 2>&1
 if git diff --staged --quiet; then
   echo "[$(date '+%F %T')] 内容无变化，不提交" >> "$LOG"
